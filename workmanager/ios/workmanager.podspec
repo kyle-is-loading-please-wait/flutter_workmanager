@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'workmanager'
-  s.version          = '0.0.1'
+  s.version          = '0.5.2'
   s.summary          = 'Flutter Workmanager'
   s.description      = <<-DESC
 Flutter Android Workmanager
@@ -18,5 +18,7 @@ Flutter Android Workmanager
 
   s.ios.deployment_target = '10.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
+  s.resource_bundles = { 'flutter_workmanager_privacy' => ['Resources/PrivacyInfo.xcprivacy'] }
+
 end
 
