@@ -224,7 +224,6 @@ class _MyAppState extends State<MyApp> {
                             Workmanager().registerPeriodicTask(
                               simplePeriodic1HourTask,
                               simplePeriodic1HourTask,
-                              flexInterval: Duration(minutes: 15),
                               frequency: Duration(hours: 1),
                             );
                           }
@@ -272,17 +271,6 @@ class _MyAppState extends State<MyApp> {
                       : null,
                 ),
                 SizedBox(height: 16),
-                ElevatedButton(
-                    child: Text("isscheduled (Android)"),
-                    onPressed: Platform.isAndroid
-                        ? () async {
-                            final workInfo =
-                                await Workmanager().isScheduledByUniqueName(
-                              simplePeriodicTask,
-                            );
-                            print('isscheduled = $workInfo');
-                          }
-                        : null),
                 SizedBox(height: 8),
                 Text(
                   "Task cancellation",

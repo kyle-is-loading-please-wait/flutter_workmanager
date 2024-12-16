@@ -26,6 +26,10 @@ public class SwiftWorkmanagerPlugin: FlutterPluginAppLifeCycleDelegate {
                 }
             }
 
+            struct CheckBackgroundRefreshPermission {
+                static let name = "\(CheckBackgroundRefreshPermission.self)".lowercasingFirst
+            }
+
             struct RegisterOneOffTask {
                 static let name = "\(RegisterOneOffTask.self)".lowercasingFirst
                 enum Arguments: String {
@@ -144,7 +148,7 @@ public class SwiftWorkmanagerPlugin: FlutterPluginAppLifeCycleDelegate {
 
     /// Immediately starts a one off task
     @available(iOS 13.0, *)
-    public static func startOneOffTask(identifier: String, taskIdentifier: UIBackgroundTaskIdentifier, inputData: String, delaySeconds: Int64) {
+    public static func startOneOffTask(identifier: String, taskIdentifier: UIBackgroundTaskIdentifier, inputData:String, delaySeconds: Int64) {
         let operationQueue = OperationQueue()
         // Create an operation that performs the main part of the background task
         let operation = BackgroundTaskOperation(
@@ -267,6 +271,9 @@ extension SwiftWorkmanagerPlugin: FlutterPlugin {
         case (ForegroundMethodChannel.Methods.Initialize.name, let .some(arguments)):
             initialize(arguments: arguments, result: result)
             return
+        case (ForegroundMethodChannel.Methods.CheckBackgroundRefreshPermission.name, .some):
+            _ = checkBackgroundRefreshPermission(result: result)
+            return
         case (ForegroundMethodChannel.Methods.RegisterOneOffTask.name, let .some(arguments)):
             registerOneOffTask(arguments: arguments, result: result)
             return
@@ -324,6 +331,7 @@ extension SwiftWorkmanagerPlugin: FlutterPlugin {
             var taskIdentifier: UIBackgroundTaskIdentifier = .invalid
             let inputData =
                     arguments[method.Arguments.inputData.rawValue] as? String
+
 
             taskIdentifier = UIApplication.shared.beginBackgroundTask(withName: uniqueTaskIdentifier, expirationHandler: {
                 // Mark the task as ended if time is expired, otherwise iOS might terminate and will throttle future executions
@@ -395,8 +403,8 @@ extension SwiftWorkmanagerPlugin: FlutterPlugin {
             SwiftWorkmanagerPlugin.scheduleBackgroundProcessingTask(
                 withIdentifier: uniqueTaskIdentifier,
                 earliestBeginInSeconds: delaySeconds,
-                requiresNetworkConnectivity: requiresNetwork,
-                requiresExternalPower: requiresCharging)
+                requiresNetworkConnectivity: requiresCharging,
+                requiresExternalPower: requiresNetwork)
 
             result(true)
             return
