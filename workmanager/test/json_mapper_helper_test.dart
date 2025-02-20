@@ -135,7 +135,6 @@ void main() {
               uniqueName: "uniqueName",
               taskName: "taskName",
               frequency: Duration(seconds: 1),
-              flexInterval: Duration(seconds: 1),
               tag: "tag",
               existingWorkPolicy: ExistingWorkPolicy.replace,
               initialDelay: Duration(seconds: 2),
